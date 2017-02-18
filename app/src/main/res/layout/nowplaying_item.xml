@@ -3,40 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorBlack">
 
-
-    <ImageView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/animal"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="43dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/ivPosterImage" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivPosterImage"
-        android:layout_toRightOf="@+id/ivPosterImage"
-        android:layout_toEndOf="@+id/ivPosterImage"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="14dp"
-        android:id="@+id/tvMovieTitle" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/animal"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/ivPosterImage" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvMovieTitle"
-        android:layout_alignRight="@+id/tvMovieTitle"
-        android:layout_alignEnd="@+id/tvMovieTitle"
-        android:layout_marginTop="23dp"
-        android:id="@+id/tvMovieOverview" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/ivPosterImage"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_title"
+                android:id="@+id/tvMovieTitle" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:layout_toRightOf="@id/ivPosterImage"
+                android:textSize="@dimen/text_size_overview"
+                android:id="@+id/tvMovieOverview" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
 </RelativeLayout>

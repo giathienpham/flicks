@@ -1,6 +1,7 @@
 package com.thienpg.flicks.utility;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,7 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
         viewHolder.title.setText(movie.getTitle());
         viewHolder.overview.setText(movie.getOverview());
 //        viewHolder.poster.setDateFormatText(movie.getOverview());
-        loadImageToView(IMAGE_URL + movie.getPosterPath(), viewHolder.poster);
+        loadImageToView(movie.getPosterPath(), viewHolder.poster);
 
         // Return the completed view to render on screen
 
@@ -85,7 +86,8 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
     }
 
     private void loadImageToView(String imageUri, ImageView view){
-        Picasso.with(mContext).load(imageUri).fit().centerCrop()
+        Log.d("ImageUrl", IMAGE_URL + imageUri);
+        Picasso.with(mContext).load(IMAGE_URL + imageUri).resize(500, 500)
                 .into(view);
     }
 
