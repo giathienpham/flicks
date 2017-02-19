@@ -1,6 +1,7 @@
 package com.thienpg.flicks.utility;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,20 +75,38 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
         // Populate the data from the data object via the viewHolder object
         // into the template view.
 
+
+
         viewHolder.title.setText(movie.getTitle());
         viewHolder.overview.setText(movie.getOverview());
-//        viewHolder.poster.setDateFormatText(movie.getOverview());
-        loadImageToView(movie.getPosterPath(), viewHolder.poster);
+        Log.d("backdrop", movie.getBackdropPath());
+
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (movie.getVoteAverage() >= 5){
+                loadPosterToView(movie.getPosterPath(), viewHolder.poster);
+            }else {
+                loadBackdropToView(movie.getBackdropPath(), viewHolder.poster);
+            }
+
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            loadBackdropToView(movie.getBackdropPath(), viewHolder.poster);
+        }
 
         // Return the completed view to render on screen
-
         return convertView;
 
     }
 
-    private void loadImageToView(String imageUri, ImageView view){
+    private void loadPosterToView(String imageUri, ImageView view){
         Log.d("ImageUrl", IMAGE_URL + imageUri);
-        Picasso.with(mContext).load(IMAGE_URL + imageUri).resize(500, 500)
+        Picasso.with(mContext).load(IMAGE_URL + imageUri).resize(500, 0)
+                .into(view);
+    }
+
+    private void loadBackdropToView(String imageUri, ImageView view){
+        Log.d("ImageUrl", IMAGE_URL + imageUri);
+        Picasso.with(mContext).load(IMAGE_URL + imageUri).resize(1000, 0)
                 .into(view);
     }
 
