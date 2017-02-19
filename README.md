@@ -40,7 +40,7 @@ The following **additional** features are implemented:
 Here's a walkthrough of implemented user stories:
 
 **Potrait**
-![Video Walkthrough](flick_potrait.gif)
+![Video Walkthrough](flicks_potrait.gif)
 
 **Landscape**
 ![Video Walkthrough](flicks_landscape.gif)
