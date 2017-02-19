@@ -1,6 +1,7 @@
 package com.thienpg.flicks.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.thienpg.flicks.MovieActivity;
 import com.thienpg.flicks.R;
 import com.thienpg.flicks.model.NowPlaying;
 import com.thienpg.flicks.model.Result;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 import static com.thienpg.flicks.utility.Constant.IMAGE_URL;
 
@@ -27,10 +33,14 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
    private Context mContext;
 
     // View lookup cache
-    private static class ViewHolder {
-        ImageView poster;
-        TextView title;
-        TextView overview;
+    static class ViewHolder {
+       @BindView(R.id.ivPosterImage) ImageView poster;
+        @BindView(R.id.tvMovieTitle)  TextView title;
+        @BindView(R.id.tvMovieOverview)  TextView overview;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
 
@@ -42,27 +52,27 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
 
 
 
+
     @Override
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
-        Result movie = getItem(position);
+        final Result movie = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
         if (convertView == null) {
             // If there's no view to re-use, inflate a brand new view for row
-            viewHolder = new ViewHolder();
-
             LayoutInflater inflater = LayoutInflater.from(getContext());
 
             convertView = inflater.inflate(R.layout.nowplaying_item, parent, false);
 
-            viewHolder.title = (TextView) convertView.findViewById(R.id.tvMovieTitle);
-            viewHolder.overview = (TextView) convertView.findViewById(R.id.tvMovieOverview);
-            viewHolder.poster = (ImageView) convertView.findViewById(R.id.ivPosterImage);
+            viewHolder = new ViewHolder(convertView);
+//            viewHolder.title = (TextView) convertView.findViewById(R.id.tvMovieTitle);
+//            viewHolder.overview = (TextView) convertView.findViewById(R.id.tvMovieOverview);
+//            viewHolder.poster = (ImageView) convertView.findViewById(R.id.ivPosterImage);
 
             // Cache the viewHolder object inside the fresh view
             convertView.setTag(viewHolder);
@@ -72,26 +82,30 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        // Populate the data from the data object via the viewHolder object
-        // into the template view.
-
-
-
         viewHolder.title.setText(movie.getTitle());
         viewHolder.overview.setText(movie.getOverview());
-        Log.d("backdrop", movie.getBackdropPath());
-
+        loadPosterToView(movie.getPosterPath(), viewHolder.poster);
+        // Populate the data from the data object via the viewHolder object
+        // into the template view.
         int orientation = getContext().getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (movie.getVoteAverage() >= 5){
-                loadPosterToView(movie.getPosterPath(), viewHolder.poster);
-            }else {
-                loadBackdropToView(movie.getBackdropPath(), viewHolder.poster);
-            }
-
+            loadPosterToView(movie.getPosterPath(), viewHolder.poster);
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             loadBackdropToView(movie.getBackdropPath(), viewHolder.poster);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), MovieActivity.class);
+                i.putExtra("backdrop", movie.getBackdropPath());
+                i.putExtra("title", movie.getTitle());
+                i.putExtra("date", movie.getReleaseDate());
+                i.putExtra("rating", movie.getVoteAverage()+"");
+                i.putExtra("overview", movie.getOverview());
+                getContext().startActivity(i);
+            }
+        });
 
         // Return the completed view to render on screen
         return convertView;
@@ -100,13 +114,19 @@ public class NowPlayingArrayAdapter extends ArrayAdapter<Result> {
 
     private void loadPosterToView(String imageUri, ImageView view){
         Log.d("ImageUrl", IMAGE_URL + imageUri);
-        Picasso.with(mContext).load(IMAGE_URL + imageUri).resize(500, 0)
+        Picasso.with(mContext).load(IMAGE_URL + imageUri)
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .transform(new RoundedCornersTransformation(20, 20)).resize(500, 0)
                 .into(view);
     }
 
     private void loadBackdropToView(String imageUri, ImageView view){
         Log.d("ImageUrl", IMAGE_URL + imageUri);
         Picasso.with(mContext).load(IMAGE_URL + imageUri).resize(1000, 0)
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .transform(new RoundedCornersTransformation(20, 20))
                 .into(view);
     }
 

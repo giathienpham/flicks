@@ -1,9 +1,12 @@
 package com.thienpg.flicks;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView lvNowPlaying;
     NowPlaying data;
     Context mContext;
+    private SwipeRefreshLayout swipeContainer;
+
 
     Gson gson = new GsonBuilder()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
@@ -54,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
                 data = response.body();
                 lvNowPlaying.setAdapter(new NowPlayingArrayAdapter(mContext, data));
                 Log.d("NowPlaying", data.getResults().get(0).getPosterPath());
+                swipeContainer.setRefreshing(false);
+
             }
 
             @Override
@@ -75,5 +82,28 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         getNowPlaying();
 
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                getNowPlaying();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        lvNowPlaying.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("aaa", "Aa");
+            }
+        });
     }
 }

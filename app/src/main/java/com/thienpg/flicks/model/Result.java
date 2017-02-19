@@ -12,6 +12,7 @@ public class Result {
     private String posterPath;
     private Boolean adult;
     private String overview;
+    @SerializedName("release_date")
     private String releaseDate;
     private List<Integer> genreIds = null;
     private Integer id;
