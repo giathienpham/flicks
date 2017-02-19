@@ -39,10 +39,12 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-**Potrait**
+##Potrait##
+
 ![Video Walkthrough](flicks_potrait.gif)
 
-**Landscape**
+##Landscape
+
 ![Video Walkthrough](flicks_landscape.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
@@ -53,8 +55,9 @@ Describe any challenges encountered while building the app.
 
 ## Open-source libraries used
 
-- [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
+- [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java			
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [ButterKnife](http://jakewharton.github.io/butterknife/) - Annotate fields with @BindView and a view ID for Butter Knife to find and automatically cast the corresponding view in your layout.
 
 ## License
 
